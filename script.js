@@ -97,7 +97,7 @@ function renderProfileDetails (data) {
     <p class="gray-text">${data.userName}</p>
   </div>
   <p class="gray-text joined"><i class="far fa-calendar-alt"></i> Joined ${data.joinedDate}</p>
-  <p class="gray-text"><span class="black-text">${data.followingCount}</span> Following <span class="black-text">${data.followerCount}</span> Followers</p>
+  <p class="gray-text"><span class="black-text">${data.followingCount}</span> Following <span class="black-text">${abbreviateNumber(data.followerCount)}</span> Followers</p>
   `
   container.appendChild(profileDiv);
 }
@@ -167,6 +167,28 @@ function renderTweets (user, timelineTweets) {
 
   
   container.appendChild(tweetsContainer);
+}
+
+var SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
+
+function abbreviateNumber(number){
+
+    // what tier? (determines SI symbol)
+    var tier = Math.log10(Math.abs(number)) / 3 | 0;
+    
+    // if zero, we don't need a suffix
+    if(tier == 0) return number;
+
+    // get suffix and determine scale
+    var suffix = SI_SYMBOL[tier];
+    
+    var scale = Math.pow(10, tier * 3);
+    
+    // scale the number
+    var scaled = number / scale;
+    
+    // format number and add suffix
+    return scaled.toFixed(1) + suffix;
 }
 
 renderApp();
